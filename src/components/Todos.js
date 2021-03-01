@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import useInputs from '../hooks/useInputs';
 
 const TodoItem = React.memo(function TodoItem({ todo, onToggle }) {
   return (
@@ -26,19 +27,21 @@ const TodoList = React.memo(function TodoList({ todos, onToggle}) {
 });
 
 function Todos({ todos, onToggle, onCreate }) {
-  const [text, setText] = useState('');
-  const onChange = e => setText(e.target.value);
+  const [form, onChange, reset] = useInputs({
+    something: '',
+  });
+  const { something } = form;
   const onSubmit = e => {
     e.preventDefault();
-    onCreate(text);
-    setText('');
+    onCreate(something);
+    reset();
   }
 
   return (
     <div>
       <form onSubmit={onSubmit}>
         <input 
-          type="text" value={text} onChange={onChange}
+          type="text" name="something" value={something} onChange={onChange}
           placeholder="할 일을 입력해 주세요." 
         />
         <button type="submit">등록</button>
